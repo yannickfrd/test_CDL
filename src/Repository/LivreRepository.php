@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\FilterLivre;
 use App\Entity\Livre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -24,7 +25,6 @@ class LivreRepository extends ServiceEntityRepository
     {
 
         $query = $this->createQueryBuilder('l')
-//            ->addSelect('l.id, l.name, l.date cat.name, aut.name, l.categorie, l.auteur')
             ->leftJoin('l.categorie', 'cat')
             ->leftJoin('l.auteur', 'aut')
         ;
@@ -43,11 +43,11 @@ class LivreRepository extends ServiceEntityRepository
         }
         if ($search->getCategorie()) {
             foreach ($search->getCategorie() as $categ) {
+                $val = 'livreCategorie'.$categ->getId();
                 $query = $query
-                    ->andWhere('cat.name = :livreCategorie'.$categ->getId())
-                    ->setParameter('livreCategorie'.$categ->getId(), $categ->getName());
+                    ->orWhere('cat.name = :livreCategorie'.$categ->getId())
+                    ->setParameter($val, $categ->getName());
             }
-
         }
         if ($search->getAuteur()) {
             $query = $query
