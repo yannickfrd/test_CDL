@@ -37,7 +37,7 @@ class LivreRepository extends ServiceEntityRepository
         if ($search->getDate()) {
             $query = $query
                 ->andWhere('l.date > :livreDate')
-                ->setParameter('livreDate', $search->getDate())
+                ->setParameter('livreDate', $search->getDate() . '-0-0')
             ;
         }
         if ($search->getCategorie()) {
