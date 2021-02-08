@@ -1,28 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello LivreController!{% endblock %}
+{% block title %}Livre index{% endblock %}
 
 {% block body %}
+    <h1>Livre index</h1>
 
-
-<div class="ensemble-livres">
-
-
-
-    <div class="container mt-5">
-        <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
-            {% for livre in livres %}
-                <div class="col">
-                    <div class="card" style="width: 10rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ livre.name }}</h5>
-                        <p class="card-date">{{ livre.date|date('Y') }}</p>
-                        <a href="#" class="btn btn-primary">En voir plus</a>
-                    </div>
-                </div>
-                </div>
-            {% endfor %}
-        </div>
+    <div id="search">
+        {{ form(form) }}
     </div>
-</div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for livre in livres %}
+            <tr>
+                <td>{{ livre.id }}</td>
+                <td>{{ livre.name }}</td>
+                <td>{{ livre.date ? livre.date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('livre_show', {'id': livre.id}) }}">show</a>
+                    <a href="{{ path('livre_edit', {'id': livre.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('livre_new') }}">Create new</a>
 {% endblock %}
