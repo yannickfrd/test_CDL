@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Auteur{% endblock %}
+
+{% block body %}
+    <h1>Auteur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ auteur.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ auteur.name }}</td>
+            </tr>
+            <tr>
+                <th>Date_naissance</th>
+                <td>{{ auteur.dateNaissance ? auteur.dateNaissance|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('auteur_index') }}">back to list</a>
+
+    <a href="{{ path('auteur_edit', {'id': auteur.id}) }}">edit</a>
+
+    {{ include('auteur/_delete_form.html.twig') }}
+{% endblock %}
