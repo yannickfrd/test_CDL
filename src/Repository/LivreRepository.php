@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\FilterLivre;
 use App\Entity\Livre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +18,43 @@ class LivreRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Livre::class);
+    }
+
+    public function SearchQuery(FilterLivre $search)
+    {
+
+        $query = $this->createQueryBuilder('l')
+            ->leftJoin('l.categorie', 'cat')
+            ->leftJoin('l.auteur', 'aut')
+        ;
+
+        if ($search->getName()) {
+            $query = $query
+                ->andWhere('l.name LIKE :livreName')
+                ->setParameter('livreName', '%' . $search->getName() . '%')
+            ;
+        }
+        if ($search->getDate()) {
+            $query = $query
+                ->andWhere('l.date > :livreDate')
+                ->setParameter('livreDate', $search->getDate())
+            ;
+        }
+        if ($search->getCategorie()) {
+            $query = $query
+                ->andWhere('cat.name = :livreCategorie')
+                ->setParameter('livreCategorie', $search->getCategorie()->getName())
+            ;
+        }
+        if ($search->getAuteur()) {
+            $query = $query
+                ->andWhere('aut.name = :livreAuteur')
+                ->setParameter('livreAuteur', $search->getAuteur()->getName())
+            ;
+        }
+
+        $query = $query->getQuery();
+        return $query->getResult();
     }
 
     // /**

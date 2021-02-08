@@ -61,12 +61,12 @@ class Auteur
         return $this;
     }
 
-    public function getLivre(): ?Livre
+    public function getLivre(): ?FilterLivre
     {
         return $this->livre;
     }
 
-    public function setLivre(?Livre $livre): self
+    public function setLivre(?FilterLivre $livre): self
     {
         $this->livre = $livre;
 
