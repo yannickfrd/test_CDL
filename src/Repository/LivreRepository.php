@@ -24,6 +24,7 @@ class LivreRepository extends ServiceEntityRepository
     {
 
         $query = $this->createQueryBuilder('l')
+//            ->addSelect('l.id, l.name, l.date cat.name, aut.name, l.categorie, l.auteur')
             ->leftJoin('l.categorie', 'cat')
             ->leftJoin('l.auteur', 'aut')
         ;
@@ -36,15 +37,17 @@ class LivreRepository extends ServiceEntityRepository
         }
         if ($search->getDate()) {
             $query = $query
-                ->andWhere('l.date > :livreDate')
-                ->setParameter('livreDate', $search->getDate() . '-0-0')
+                ->andWhere('l.date LIKE :livreDate')
+                ->setParameter('livreDate', $search->getDate() . '%')
             ;
         }
         if ($search->getCategorie()) {
-            $query = $query
-                ->andWhere('cat.name = :livreCategorie')
-                ->setParameter('livreCategorie', $search->getCategorie()->getName())
-            ;
+            foreach ($search->getCategorie() as $categ) {
+                $query = $query
+                    ->andWhere('cat.name = :livreCategorie'.$categ->getId())
+                    ->setParameter('livreCategorie'.$categ->getId(), $categ->getName());
+            }
+
         }
         if ($search->getAuteur()) {
             $query = $query

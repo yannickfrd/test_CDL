@@ -46,6 +46,8 @@ class FilterLivreSearchType extends AbstractType
                 'label' => 'Nom de l\'auteur'
             ])
             ->add('categorie', EntityType::class, [
+                'multiple' => true,
+                'expanded' => true,
                 'class' => Categorie::class,
                 'choice_label' => 'name',
                 'required' => false,

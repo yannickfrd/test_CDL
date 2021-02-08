@@ -28,6 +28,7 @@ class LivreController extends AbstractController
         $query = $livreRepository->findAll();
         if ( $form->isSubmitted() && $form->isValid() ) {
             $query = $livreRepository->SearchQuery($search);
+//            dd($query);
         }
 
         return $this->render('livre/index.html.twig', [
